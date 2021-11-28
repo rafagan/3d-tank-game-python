@@ -1,22 +1,15 @@
+from logging import exception
+
 import numpy as np
+from OpenGL.GL import *
 
 from game.globals import Global
 from primitive.idrawable import IDrawable
-from util.gl_color import GlColor
-from OpenGL.GL import *
 
 
 class Box(IDrawable):
     def __init__(self):
-        self.color = Global().default_color
-
-        self.colors = [
-            # Front Face
-            GlColor.from_color(255, 0, 0, 255),
-
-            # Back face
-            GlColor.from_color(255, 0, 0, 255)
-        ]
+        self.colors = []
 
         self.vertices = [
             # Front Face
@@ -56,17 +49,17 @@ class Box(IDrawable):
             np.array([-1.0,  1.0, -1.0]),
         ]
 
-    def get_color(self) -> GlColor:
-        return self.color
-
-    def set_color(self, color: GlColor) -> None:
-        self.color = color
+    def set_face_colors(self, colors):
+        if len(colors) != 6:
+            raise exception('You must provide 6 colors, one for each face')
+        self.colors = colors
 
     def draw(self) -> None:
-        self.color.gl_set()
-
         glBegin(GL_QUADS)
-        for vertex in self.vertices:
+        for i, vertex in enumerate(self.vertices):
+            if len(self.colors) == 6 and i % 4 == 0:
+                self.colors[i // 4].gl_set()
+
             glVertex3f(vertex[0], vertex[1], vertex[2])
         glEnd()
 

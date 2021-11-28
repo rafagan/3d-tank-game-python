@@ -90,7 +90,7 @@ class Window:
 
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        # Camera().update()
+        Camera().update()
         self.game.draw()
 
         glutSwapBuffers()
@@ -106,11 +106,11 @@ class Window:
 
         self.accumulated_rate += dt
         Global().delta_time = dt
-        self.game.update()
 
         if KeyListener().is_key_pressed(KeyListener().ESCAPE):
             self.__terminate_gracefully()
 
+        self.game.update()
         KeyListener().update()
         if self.accumulated_rate > Global().goal_rate:
             self.accumulated_rate = self.accumulated_rate - Global().goal_rate

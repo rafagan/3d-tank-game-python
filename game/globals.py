@@ -8,7 +8,7 @@ class Global:
         self.clear_color = GlColor.dark_gray_color()
         self.default_color = GlColor.white_color()
 
-        self.window_title = '3D Game'
+        self.window_title = '3D Tank Game'
         self.window_default_width = 1024
         self.window_default_height = 768
         self.window_width = self.window_default_width
