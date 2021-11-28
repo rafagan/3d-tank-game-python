@@ -61,11 +61,7 @@ class AABB(ICollider):
         GlColor.from_color(0, 255, 0, 255).gl_set()
         glPushMatrix()
 
-        glTranslatef(
-            self.position[0],
-            self.position[1],
-            self.position[2]
-        )
+        glTranslatef(self.position[0], self.position[1], self.position[2])
         glScalef(self.width, self.height, self.depth)
 
         mesh.draw()
@@ -75,35 +71,22 @@ class AABB(ICollider):
     def check_collision(self, other: ICollider) -> bool:
         if isinstance(other, AABB):
             mi = self.get_min()
-            min_x = mi[0]
-            min_y = mi[1]
-            min_z = mi[2]
-
             ma = self.get_max()
-            max_x = ma[0]
-            max_y = ma[1]
-            max_z = ma[2]
-
             omi = other.get_min()
-            other_min_x = omi[0]
-            other_min_y = omi[1]
-            other_min_z = omi[2]
-
             oma = other.get_max()
-            other_max_x = oma[0]
-            other_max_y = oma[1]
-            other_max_z = oma[2]
 
-            return (
-                (min_x <= other_max_x and max_x >= other_min_x) and
-                (min_y <= other_max_y and max_y >= other_min_y) and
-                (min_z <= other_max_z and max_z >= other_min_z)
-            )
+            for i in range(3):
+                if ma[i] < omi[i]:
+                    return False
+                if mi[i] > oma[i]:
+                    return False
+
+            return True
 
         raise Exception('Unsupported collider')
 
     def get_min(self) -> np.array:
-        return self.position - self.min
+        return self.position + self.min
 
     def get_max(self) -> np.array:
         return self.position + self.max

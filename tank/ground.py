@@ -38,7 +38,7 @@ class Ground(IDrawable, ICollidable):
                 self.planes.append(plane)
                 current_color_index = (current_color_index + 1) % len(colors)
 
-        # World().collidable_with_bullet.append(self)
+        World().collidable_with_bullet.append(self)
 
     def update(self) -> None:
         self.collider.update(self.position, self.grid_width, 1, self.grid_depth)
@@ -58,6 +58,8 @@ class Ground(IDrawable, ICollidable):
                 )
                 self.planes[j + i * self.grid_depth].draw()
                 glPopMatrix()
+
+        # self.collider.draw()
 
     def get_collider(self) -> ICollider:
         return self.collider

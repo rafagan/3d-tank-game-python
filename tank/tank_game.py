@@ -9,6 +9,7 @@ from tank.wall import Wall
 from tank.ground import Ground
 from tank.tank import Tank
 from util.math import vector, to_radians
+from util.math.collision import AABB
 from window.key_listener import KeyListener
 
 
@@ -18,7 +19,10 @@ class TankGame(IGame):
         self.wall = Wall()
         self.tank = Tank()
 
-        self.camera_angle = 0
+        self.camera_angle = 180
+
+        self.aabb = AABB()
+        self.aabb.update(np.array([0, 0, 0]), 1, 1, 1)
 
     def init(self) -> None:
         self.tank.position = np.array([-self.ground.grid_width / 2, 1.0, 0.0])
@@ -32,14 +36,14 @@ class TankGame(IGame):
         # Camera().target = np.array([0.0, 10.0, 0.0])
 
         # Left View
-        Camera().eye = np.array([-45.0, 5.0, -10.0])
-        Camera().target = np.array([0.0, 10.0, 0.0])
+        # Camera().eye = np.array([-45.0, 5.0, -10.0])
+        # Camera().target = np.array([0.0, 10.0, 0.0])
 
     def terminate(self) -> None:
         ...
 
     def rotate_camera_around(self):
-        self.camera_angle += 20 * Global().delta_time
+        self.camera_angle += 10 * Global().delta_time
         v = vector.from_size_and_angle(40, to_radians(self.camera_angle))
         Camera().eye = np.array([v[0], 10, v[1]])
         Camera().target = np.array([0, 0, 0])
@@ -63,12 +67,18 @@ class TankGame(IGame):
             self.tank.turn_cannon_down()
         if KeyListener().is_key_first_pressed(b' '):
             self.tank.spawn_bullet()
+        if KeyListener().is_key_first_pressed(b'z'):
+            self.tank.increase_bullet_speed()
+        if KeyListener().is_key_first_pressed(b'x'):
+            self.tank.decrease_bullet_speed()
 
         self.ground.update()
         self.wall.update()
         self.tank.update()
 
-        # self.rotate_camera_around()
+        self.rotate_camera_around()
+
+        # print(self.aabb.check_collision(self.ground.collider))
 
     def draw(self) -> None:
         self.ground.draw()

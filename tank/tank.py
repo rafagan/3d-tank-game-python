@@ -69,6 +69,10 @@ class Tank(IDrawable):
         delta = angular_velocity * Global().delta_time
         self.cannon_angle += delta
 
+    def __change_bullet_speed(self, amount):
+        self.bullet_speed += amount
+        print(f'Bullet speed changed: {self.bullet_speed}')
+
     def move_forward(self) -> None:
         self.__move(1)
 
@@ -92,6 +96,12 @@ class Tank(IDrawable):
 
     def turn_cannon_down(self) -> None:
         self.__turn_cannon(1)
+
+    def increase_bullet_speed(self):
+        self.__change_bullet_speed(1)
+
+    def decrease_bullet_speed(self):
+        self.__change_bullet_speed(-1)
 
     def current_angle(self) -> float:
         return self.angle + self.start_angle
