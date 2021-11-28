@@ -1,12 +1,14 @@
 import numpy as np
 from OpenGL.GL import *
+from OpenGL.GLUT import *
 
 from game.globals import Global
 from primitive.idrawable import IDrawable
 
 
-class Plane(IDrawable):
+class Sphere(IDrawable):
     def __init__(self):
+        self.resolution = 100
         self.color = Global().default_color
 
         self.vertices = [
@@ -21,10 +23,5 @@ class Plane(IDrawable):
 
     def draw(self) -> None:
         self.color.gl_set()
-
-        glBegin(GL_QUADS)
-        for i, vertex in enumerate(self.vertices):
-            glVertex3f(vertex[0], vertex[1], vertex[2])
-        glEnd()
-
+        glutSolidSphere(1.0, self.resolution, self.resolution)
         Global().default_color.gl_set()

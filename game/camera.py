@@ -18,7 +18,7 @@ class Camera:
         self.target = np.array([0.0, 0.0, self.look_at_magnitude])
 
         # Camera top direction vector
-        self.up = np.array([0.0, -1.0, 0.0])
+        self.up = np.array([0.0, 1.0, 0.0])
 
     def update(self) -> None:
         gluLookAt(
