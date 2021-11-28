@@ -86,7 +86,15 @@ class Wall(IDrawable, ICollidable):
                 if aabb is None:
                     continue
                 if aabb.check_collision(other.get_collider()):
+                    destroyed_tiles.append(i - 1 - self.grid_depth)
+                    destroyed_tiles.append(i - self.grid_depth)
+                    destroyed_tiles.append(i + 1 - self.grid_depth)
+                    destroyed_tiles.append(i - 1)
                     destroyed_tiles.append(i)
+                    destroyed_tiles.append(i + 1)
+                    destroyed_tiles.append(i - 1 + self.grid_depth)
+                    destroyed_tiles.append(i + self.grid_depth)
+                    destroyed_tiles.append(i + 1 + self.grid_depth)
                     other.kill()
                     break
 
@@ -94,5 +102,7 @@ class Wall(IDrawable, ICollidable):
 
     def destroy_wall_tiles(self, destroyed_indexes: set[int]) -> None:
         for i in destroyed_indexes:
+            if i < 0 or i > self.grid_depth * self.grid_height:
+                continue
             self.cubes[i] = None
             self.cube_colliders[i] = None

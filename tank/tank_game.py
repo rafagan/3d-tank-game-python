@@ -28,7 +28,7 @@ class TankGame(IGame):
         self.scene_objects = []
         for i in range(0):
             self.scene_objects.append(SceneObject(
-                SceneObjectType.FRIEND,
+                SceneObjectType.FRIEND if i % 2 == 0 else SceneObjectType.ENEMY,
                 np.array([-10, 2.5, 0]),
                 np.array([5, 5, 5])
             ))

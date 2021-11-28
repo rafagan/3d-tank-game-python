@@ -1,8 +1,6 @@
-from typing import List
-
 import numpy as np
+from OpenGL.GL import *
 
-from game.camera import Camera
 from game.globals import Global
 from game.world import World
 from primitive.box import Box
@@ -10,11 +8,7 @@ from primitive.cylinder import Cylinder
 from primitive.idrawable import IDrawable
 from tank.bullet import Bullet
 from util.gl_color import GlColor
-from OpenGL.GL import *
-
 from util.math import vector, to_radians
-from util.math.collision import ICollidable
-from window.key_listener import KeyListener
 
 
 class Tank(IDrawable):
@@ -28,7 +22,7 @@ class Tank(IDrawable):
 
         self.linear_speed = 2.5
         self.angular_speed = 45.0
-        self.bullet_speed = 17.0
+        self.bullet_speed = 10.0
 
         self.base_angle = 0.0
         self.cannon_angle = 45.0
