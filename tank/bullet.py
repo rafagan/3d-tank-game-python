@@ -15,7 +15,7 @@ class Bullet(IDrawable, ICollidable):
     def __init__(self, start_position: np.array, direction: np.array, speed: float):
         self.position = start_position
         self.velocity = direction * speed
-        self.size = np.array([0.5, 0.5, 0.5])
+        self.size = np.array([0.4, 0.4, 0.4])
         self.collider = AABB()
         self.lifetime = 0
         self.max_lifetime = 5

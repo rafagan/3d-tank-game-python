@@ -18,7 +18,7 @@ class TankGame(IGame):
         self.wall = Wall()
         self.tank = Tank()
 
-        self.angle = 0
+        self.camera_angle = 0
 
     def init(self) -> None:
         self.tank.position = np.array([-self.ground.grid_width / 2, 1.0, 0.0])
@@ -38,6 +38,12 @@ class TankGame(IGame):
     def terminate(self) -> None:
         ...
 
+    def rotate_camera_around(self):
+        self.camera_angle += 20 * Global().delta_time
+        v = vector.from_size_and_angle(40, to_radians(self.camera_angle))
+        Camera().eye = np.array([v[0], 10, v[1]])
+        Camera().target = np.array([0, 0, 0])
+
     def update(self) -> None:
         if KeyListener().is_key_pressed(GLUT_KEY_UP):
             self.tank.move_forward()
@@ -52,9 +58,9 @@ class TankGame(IGame):
         if KeyListener().is_key_pressed(b'w'):
             self.tank.turn_base_right()
         if KeyListener().is_key_pressed(b'a'):
-            self.tank.turn_cannon_left()
+            self.tank.turn_cannon_up()
         if KeyListener().is_key_pressed(b's'):
-            self.tank.turn_cannon_right()
+            self.tank.turn_cannon_down()
         if KeyListener().is_key_first_pressed(b' '):
             self.tank.spawn_bullet()
 
@@ -62,10 +68,7 @@ class TankGame(IGame):
         self.wall.update()
         self.tank.update()
 
-        self.angle += 20 * Global().delta_time
-        v = vector.from_size_and_angle(40, to_radians(self.angle))
-        Camera().eye = np.array([v[0], 10, v[1]])
-        Camera().target = np.array([0, 0, 0])
+        # self.rotate_camera_around()
 
     def draw(self) -> None:
         self.ground.draw()

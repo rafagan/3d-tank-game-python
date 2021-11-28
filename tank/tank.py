@@ -30,7 +30,9 @@ class Tank(IDrawable):
         self.bullet_speed = 12.0
 
         self.base_angle = 0.0
-        self.cannon_angle = 0.0
+        self.cannon_angle = 45.0
+        self.base_offset = np.array([0, 1, 0])
+        self.cannon_offset = np.array([0, 1, 0])
 
         self.mesh = Box()
         self.mesh.colors = [GlColor.black_color()] * 6
@@ -85,24 +87,24 @@ class Tank(IDrawable):
     def turn_base_right(self) -> None:
         self.__turn_base(1)
 
-    def turn_cannon_left(self) -> None:
+    def turn_cannon_up(self) -> None:
         self.__turn_cannon(-1)
 
-    def turn_cannon_right(self) -> None:
+    def turn_cannon_down(self) -> None:
         self.__turn_cannon(1)
 
     def current_angle(self) -> float:
         return self.angle + self.start_angle
     
     def current_cannon_angle(self) -> float:
-        return self.current_angle() + self.base_angle + self.cannon_angle
+        return self.current_angle() + self.base_angle
 
     def spawn_bullet(self):
         self.bullets.append(Bullet(
-            self.position.copy(),
+            self.position + self.base_offset,
             vector.rotate(
                 self.get_forward_cannon_direction(),
-                to_radians(45),
+                to_radians(self.cannon_angle - 90),
                 self.get_strafe_cannon_axis()
             ),
             self.bullet_speed
@@ -140,8 +142,8 @@ class Tank(IDrawable):
 
     def get_strafe_cannon_axis(self) -> np.array:
         return np.cross(
+            np.array([0, 1, 0]),
             self.get_forward_cannon_direction(),
-            np.array([0, 1, 0])
         )
 
     def draw(self) -> None:
@@ -150,22 +152,18 @@ class Tank(IDrawable):
 
         glPushMatrix()  # 1
 
-        glTranslatef(
-            self.position[0],
-            self.position[1],
-            self.position[2]
-        )
+        glTranslatef(self.position[0], self.position[1], self.position[2])
         glRotatef(-self.angle, 0, 1, 0)
 
         glPushMatrix()  # 2
 
-        glTranslatef(0, 1, 0)
+        glTranslatef(self.base_offset[0], self.base_offset[1], self.base_offset[2])
         glRotatef(-self.base_angle, 0, 1, 0)
         self.base_mesh.draw()
 
         glPushMatrix()  # 3
-        glRotatef(-self.cannon_angle, 1, 0, 0)
-        glTranslatef(0, 1, 0)
+        glRotatef(-self.cannon_angle, 0, 0, 1)
+        glTranslatef(self.cannon_offset[0], self.cannon_offset[1], self.cannon_offset[2])
         self.cannon_mesh.draw()
         glPopMatrix()  # 3
 
