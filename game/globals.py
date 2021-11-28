@@ -16,7 +16,7 @@ class Global:
         self.window_width = self.window_default_width
         self.window_height = self.window_default_height
 
-        self.frame_rate = 60
+        self.frame_rate = 16
         self.goal_rate = 1.0 / self.frame_rate
         self.delta_time = 0
 

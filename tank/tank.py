@@ -2,6 +2,7 @@ import numpy as np
 
 from game.camera import Camera
 from game.globals import Global
+from game.world import World
 from primitive.box import Box
 from primitive.idrawable import IDrawable
 from tank.bullet import Bullet
@@ -9,6 +10,7 @@ from util.gl_color import GlColor
 from OpenGL.GL import *
 
 from util.math import vector, to_radians
+from util.math.collision import ICollidable
 from window.key_listener import KeyListener
 
 
@@ -80,6 +82,20 @@ class Tank(IDrawable):
 
         for bullet in self.bullets:
             bullet.update()
+
+        self.check_collisions_with_bullets()
+
+    def check_collisions_with_bullets(self):
+        destroyed_bullets = []
+        for i, bullet in enumerate(self.bullets):
+            for collidable in World().collidable_with_bullet:
+                if collidable.has_collision_with(bullet):
+                    bullet.on_collision_enter(collidable)
+                    collidable.on_collision_enter(bullet)
+                    destroyed_bullets.append(i)
+
+        for i in destroyed_bullets:
+            self.bullets.remove(i)
 
     def draw(self) -> None:
         for bullet in self.bullets:

@@ -23,6 +23,8 @@ class Window:
         self.accumulated_rate = 0
         self.first_frames_to_skip = 60
 
+        self.display_glut_bug = 0
+
     def run(self, game: IGame) -> None:
         self.game = game
 
@@ -59,7 +61,7 @@ class Window:
 
         # OpenGL initialization
         glEnable(GL_DEPTH_TEST)
-        # glEnable(GL_CULL_FACE)
+        glEnable(GL_CULL_FACE)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
 
         self.game.init()
@@ -76,6 +78,10 @@ class Window:
         glutDestroyWindow(glutGetWindow())
 
     def __display(self) -> None:
+        self.display_glut_bug += 1
+        if self.display_glut_bug % 2 == 0:
+            return
+
         glClearColor(
             Global().clear_color.red(),
             Global().clear_color.green(),
@@ -86,7 +92,7 @@ class Window:
 
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        World.set_viewing_volume()
+        World().set_viewing_volume()
 
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
