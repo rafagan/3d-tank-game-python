@@ -26,7 +26,7 @@ class TankGame(IGame):
         self.aabb.update(np.array([0, 0, 0]), 1, 1, 1)
 
         self.scene_objects = []
-        for i in range(1):
+        for i in range(0):
             self.scene_objects.append(SceneObject(
                 SceneObjectType.FRIEND,
                 np.array([-10, 2.5, 0]),
@@ -45,8 +45,8 @@ class TankGame(IGame):
         # Camera().target = np.array([0.0, 10.0, 0.0])
 
         # Left View
-        # Camera().eye = np.array([-45.0, 5.0, -10.0])
-        # Camera().target = np.array([0.0, 10.0, 0.0])
+        Camera().eye = np.array([-45.0, 5.0, -10.0])
+        Camera().target = np.array([0.0, 10.0, 0.0])
 
     def terminate(self) -> None:
         ...
@@ -88,7 +88,7 @@ class TankGame(IGame):
         for obj in self.scene_objects:
             obj.update()
 
-        self.rotate_camera_around()
+        # self.rotate_camera_around()
 
         # print(self.aabb.check_collision(self.ground.collider))
 

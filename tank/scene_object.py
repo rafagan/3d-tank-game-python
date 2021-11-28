@@ -41,4 +41,7 @@ class SceneObject(IDrawable, ICollidable):
         return self.collider.check_collision(other.get_collider())
 
     def on_collision_enter(self, other: ICollidable) -> None:
-        ...
+        from tank.bullet import Bullet
+
+        if isinstance(other, Bullet):
+            other.kill()

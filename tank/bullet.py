@@ -5,7 +5,6 @@ from primitive.idrawable import IDrawable
 from primitive.sphere import Sphere
 from tank.ground import Ground
 from tank.scene_object import SceneObject, SceneObjectType
-from tank.wall import Wall
 from util.gl_color import GlColor
 from OpenGL.GL import *
 
@@ -39,6 +38,9 @@ class Bullet(IDrawable, ICollidable):
 
         # self.collider.draw()
 
+    def kill(self):
+        self.lifetime = self.max_lifetime + 1
+
     def get_collider(self) -> ICollider:
         return self.collider
 
@@ -46,6 +48,8 @@ class Bullet(IDrawable, ICollidable):
         return self.collider.check_collision(other.get_collider())
 
     def on_collision_enter(self, other: ICollidable) -> None:
+        from tank.wall import Wall
+
         if isinstance(other, Ground):
             print('Colidiu com Ground')
 

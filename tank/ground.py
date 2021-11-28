@@ -16,6 +16,7 @@ class Ground(IDrawable, ICollidable):
         self.grid_width = 50
         self.grid_depth = 25
         self.planes = []
+        self.plane_colliders = []
         self.collider = AABB()
 
         colors = [
@@ -38,25 +39,39 @@ class Ground(IDrawable, ICollidable):
                 self.planes.append(plane)
                 current_color_index = (current_color_index + 1) % len(colors)
 
+        distance = 1
+        start_x = -distance * self.grid_width / 2.0
+        start_z = -distance * self.grid_depth / 2.0
+        for i in range(self.grid_depth):
+            for j in range(self.grid_width):
+                aabb = AABB()
+                aabb.position = np.array([
+                    self.position[0] + start_x + distance * j,
+                    self.position[1],
+                    self.position[2] + start_z + distance * i
+                ])
+                self.plane_colliders.append(aabb)
+
         World().collidable_with_bullet.append(self)
 
     def update(self) -> None:
         self.collider.update(self.position, self.grid_width, 1, self.grid_depth)
 
     def draw(self) -> None:
-        distance = 1
-        start_x = -distance * self.grid_width / 2.0
-        start_z = -distance * self.grid_depth / 2.0
-
         for i in range(self.grid_depth):
             for j in range(self.grid_width):
+                index = j + i * self.grid_width
+                plane = self.planes[index]
+                if plane is None:
+                    continue
+
                 glPushMatrix()
                 glTranslatef(
-                    self.position[0] + start_x + distance * j,
-                    self.position[1],
-                    self.position[2] + start_z + distance * i
+                    self.plane_colliders[index].position[0],
+                    self.plane_colliders[index].position[1],
+                    self.plane_colliders[index].position[2]
                 )
-                self.planes[j + i * self.grid_depth].draw()
+                self.planes[index].draw()
                 glPopMatrix()
 
         # self.collider.draw()
@@ -68,4 +83,22 @@ class Ground(IDrawable, ICollidable):
         return self.collider.check_collision(other.get_collider())
 
     def on_collision_enter(self, other: ICollidable) -> None:
-        ...
+        from tank.bullet import Bullet
+
+        if isinstance(other, Bullet):
+            destroyed_tiles = []
+            for i, aabb in enumerate(self.plane_colliders):
+                if aabb is None:
+                    continue
+                if aabb.check_collision(other.get_collider()):
+                    destroyed_tiles.append(i)
+                    other.kill()
+                    break
+
+            self.destroy_tiles(set(destroyed_tiles))
+
+    def destroy_tiles(self, destroyed_indexes: set[int]) -> None:
+        for i in destroyed_indexes:
+            self.planes[i] = None
+            self.plane_colliders[i] = None
+

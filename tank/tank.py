@@ -27,7 +27,7 @@ class Tank(IDrawable):
 
         self.linear_speed = 2.5
         self.angular_speed = 45.0
-        self.bullet_speed = 12.0
+        self.bullet_speed = 17.0
 
         self.base_angle = 0.0
         self.cannon_angle = 45.0
@@ -132,15 +132,11 @@ class Tank(IDrawable):
         self.check_collisions_with_bullets()
 
     def check_collisions_with_bullets(self) -> None:
-        destroyed_bullets = []
         for i, bullet in enumerate(self.bullets):
             for collidable in World().collidable_with_bullet:
                 if bullet.has_collision_with(collidable):
                     bullet.on_collision_enter(collidable)
                     collidable.on_collision_enter(bullet)
-                    destroyed_bullets.append(i)
-
-        self.destroy_bullets(set(destroyed_bullets))
 
     def destroy_bullets(self, destroyed_bullets: set[int]) -> None:
         items = []
