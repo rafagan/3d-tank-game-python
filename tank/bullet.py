@@ -33,10 +33,10 @@ class Bullet(IDrawable, ICollidable):
         glPushMatrix()
         glTranslatef(self.position[0], self.position[1], self.position[2])
         glScalef(self.size[0], self.size[1], self.size[2])
-        # self.mesh.draw()
+        self.mesh.draw()
         glPopMatrix()
 
-        self.collider.draw()
+        # self.collider.draw()
 
     def get_collider(self) -> ICollider:
         return self.collider

@@ -40,7 +40,7 @@ class Ground(IDrawable, ICollidable):
 
         # World().collidable_with_bullet.append(self)
 
-    def update(self):
+    def update(self) -> None:
         self.collider.update(self.position, self.grid_width, 1, self.grid_depth)
 
     def draw(self) -> None:

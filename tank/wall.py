@@ -13,7 +13,7 @@ from util.math.collision import AABB, ICollider, ICollidable
 
 class Wall(IDrawable, ICollidable):
     def __init__(self):
-        self.grid_width = 50
+        self.grid_depth = 25
         self.grid_height = 15
         self.position = np.array([0, self.grid_height / 2 + 0.5, 0])
         self.cubes = []
@@ -27,7 +27,7 @@ class Wall(IDrawable, ICollidable):
 
         current_color_index = 0
         for i in range(self.grid_height):
-            for j in range(self.grid_width):
+            for j in range(self.grid_depth):
                 cube = Box()
                 cube.colors = [colors[current_color_index]] * 6
                 self.cubes.append(cube)
@@ -36,25 +36,25 @@ class Wall(IDrawable, ICollidable):
         World().collidable_with_bullet.append(self)
 
     def update(self) -> None:
-        self.collider.update(self.position, self.grid_width, self.grid_height, 1)
+        self.collider.update(self.position, 1, self.grid_height, self.grid_depth)
 
     def draw(self) -> None:
-        self.collider.draw()
+        distance = 1
+        start_z = -distance * self.grid_depth / 2.0
+        start_y = -distance * self.grid_height / 2.0
 
-        # distance = 1
-        # start_x = -distance * self.grid_width / 2.0
-        # start_y = -distance * self.grid_height / 2.0
-        #
-        # for i in range(self.grid_height):
-        #     for j in range(self.grid_width):
-        #         glPushMatrix()
-        #         glTranslatef(
-        #             self.position[0] + start_x + distance * j,
-        #             self.position[1] + start_y + distance * i,
-        #             self.position[2]
-        #         )
-        #         self.cubes[j + i * self.grid_height].draw()
-        #         glPopMatrix()
+        for i in range(self.grid_height):
+            for j in range(self.grid_depth):
+                glPushMatrix()
+                glTranslatef(
+                    self.position[0],
+                    self.position[1] + start_y + distance * i,
+                    self.position[2] + start_z + distance * j
+                )
+                self.cubes[j + i * self.grid_height].draw()
+                glPopMatrix()
+
+        # self.collider.draw()
 
     def get_collider(self) -> ICollider:
         return self.collider

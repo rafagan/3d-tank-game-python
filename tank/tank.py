@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from game.camera import Camera
@@ -17,18 +19,25 @@ from window.key_listener import KeyListener
 class Tank(IDrawable):
     def __init__(self):
         self.position = np.array([0.0, 0.0, 0.0])
-        self.start_angle = 90
+        self.start_angle = 0
         self.angle = 0
-        self.width = 2
+        self.width = 3
         self.height = 1
-        self.depth = 3
+        self.depth = 2
 
         self.linear_speed = 2.5
         self.angular_speed = 45.0
         self.bullet_speed = 12.0
 
+        self.base_angle = 0.0
+        self.cannon_angle = 0.0
+
         self.mesh = Box()
         self.mesh.colors = [GlColor.black_color()] * 6
+        self.base_mesh = Box()
+        self.base_mesh.colors = [GlColor.yellow_color()] * 6
+        self.cannon_mesh = Box()
+        self.cannon_mesh.colors = [GlColor.cyan_color()] * 6
 
         self.bullets = []
 
@@ -48,6 +57,16 @@ class Tank(IDrawable):
         self.angle += delta
         # Camera().turn(delta)
 
+    def __turn_base(self, clock_sense) -> None:
+        angular_velocity = self.angular_speed * clock_sense
+        delta = angular_velocity * Global().delta_time
+        self.base_angle += delta
+
+    def __turn_cannon(self, clock_sense) -> None:
+        angular_velocity = self.angular_speed * clock_sense
+        delta = angular_velocity * Global().delta_time
+        self.cannon_angle += delta
+
     def move_forward(self) -> None:
         self.__move(1)
 
@@ -60,26 +79,36 @@ class Tank(IDrawable):
     def turn_right(self) -> None:
         self.__turn(1)
 
+    def turn_base_left(self) -> None:
+        self.__turn_base(-1)
+
+    def turn_base_right(self) -> None:
+        self.__turn_base(1)
+
+    def turn_cannon_left(self) -> None:
+        self.__turn_cannon(-1)
+
+    def turn_cannon_right(self) -> None:
+        self.__turn_cannon(1)
+
     def current_angle(self) -> float:
         return self.angle + self.start_angle
+    
+    def current_cannon_angle(self) -> float:
+        return self.current_angle() + self.base_angle + self.cannon_angle
 
     def spawn_bullet(self):
-        direction_xz = vector.from_size_and_angle(1, to_radians(self.current_angle()))
-
         self.bullets.append(Bullet(
             self.position.copy(),
             vector.rotate(
-                np.array([direction_xz[0], 0, direction_xz[1]]),
-                to_radians(-45),
-                np.array([1.0, 0.0, 0.0])
+                self.get_forward_cannon_direction(),
+                to_radians(45),
+                self.get_strafe_cannon_axis()
             ),
             self.bullet_speed
         ))
 
     def update(self) -> None:
-        if KeyListener().is_key_first_pressed(b' '):
-            self.spawn_bullet()
-
         destroyed_bullets = []
         for i, bullet in enumerate(self.bullets):
             if bullet.lifetime < bullet.max_lifetime:
@@ -90,7 +119,7 @@ class Tank(IDrawable):
         self.destroy_bullets(destroyed_bullets)
         self.check_collisions_with_bullets()
 
-    def check_collisions_with_bullets(self):
+    def check_collisions_with_bullets(self) -> None:
         destroyed_bullets = []
         for i, bullet in enumerate(self.bullets):
             for collidable in World().collidable_with_bullet:
@@ -101,22 +130,48 @@ class Tank(IDrawable):
 
         self.destroy_bullets(destroyed_bullets)
 
-    def destroy_bullets(self, destroyed_bullets):
+    def destroy_bullets(self, destroyed_bullets: List[int]) -> None:
         for i in destroyed_bullets:
             del self.bullets[i]
+
+    def get_forward_cannon_direction(self) -> np.array:
+        direction_xz = vector.from_size_and_angle(1, to_radians(self.current_cannon_angle()))
+        return np.array([direction_xz[0], 0, direction_xz[1]])
+
+    def get_strafe_cannon_axis(self) -> np.array:
+        return np.cross(
+            self.get_forward_cannon_direction(),
+            np.array([0, 1, 0])
+        )
 
     def draw(self) -> None:
         for bullet in self.bullets:
             bullet.draw()
 
-        glPushMatrix()
+        glPushMatrix()  # 1
+
         glTranslatef(
             self.position[0],
             self.position[1],
             self.position[2]
         )
         glRotatef(-self.angle, 0, 1, 0)
-        glScalef(self.width, self.height, self.depth)
 
+        glPushMatrix()  # 2
+
+        glTranslatef(0, 1, 0)
+        glRotatef(-self.base_angle, 0, 1, 0)
+        self.base_mesh.draw()
+
+        glPushMatrix()  # 3
+        glRotatef(-self.cannon_angle, 1, 0, 0)
+        glTranslatef(0, 1, 0)
+        self.cannon_mesh.draw()
+        glPopMatrix()  # 3
+
+        glPopMatrix()  # 2
+
+        glScalef(self.width, self.height, self.depth)
         self.mesh.draw()
-        glPopMatrix()
+
+        glPopMatrix()  # 1
