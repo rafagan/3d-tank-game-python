@@ -4,6 +4,7 @@ from game.globals import Global
 from primitive.idrawable import IDrawable
 from primitive.sphere import Sphere
 from tank.ground import Ground
+from tank.scene_object import SceneObject, SceneObjectType
 from tank.wall import Wall
 from util.gl_color import GlColor
 from OpenGL.GL import *
@@ -42,10 +43,7 @@ class Bullet(IDrawable, ICollidable):
         return self.collider
 
     def has_collision_with(self, other: ICollidable) -> bool:
-        if self.collider.check_collision(other.get_collider()):
-            return True
-        else:
-            return False
+        return self.collider.check_collision(other.get_collider())
 
     def on_collision_enter(self, other: ICollidable) -> None:
         if isinstance(other, Ground):
@@ -54,3 +52,8 @@ class Bullet(IDrawable, ICollidable):
         if isinstance(other, Wall):
             print('Colidiu com Wall')
 
+        if isinstance(other, SceneObject):
+            if other.type == SceneObjectType.FRIEND:
+                print('Colidiu com Amigo')
+            elif other.type == SceneObjectType.ENEMY:
+                print('Colidiu com Inimigo')

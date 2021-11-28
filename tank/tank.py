@@ -128,7 +128,7 @@ class Tank(IDrawable):
             else:
                 destroyed_bullets.append(i)
 
-        self.destroy_bullets(destroyed_bullets)
+        self.destroy_bullets(set(destroyed_bullets))
         self.check_collisions_with_bullets()
 
     def check_collisions_with_bullets(self) -> None:
@@ -140,11 +140,15 @@ class Tank(IDrawable):
                     collidable.on_collision_enter(bullet)
                     destroyed_bullets.append(i)
 
-        self.destroy_bullets(destroyed_bullets)
+        self.destroy_bullets(set(destroyed_bullets))
 
-    def destroy_bullets(self, destroyed_bullets: List[int]) -> None:
-        for i in destroyed_bullets:
-            del self.bullets[i]
+    def destroy_bullets(self, destroyed_bullets: set[int]) -> None:
+        items = []
+        for i, bullet in enumerate(self.bullets):
+            if i not in destroyed_bullets:
+                items.append(bullet)
+
+        self.bullets = items
 
     def get_forward_cannon_direction(self) -> np.array:
         direction_xz = vector.from_size_and_angle(1, to_radians(self.current_cannon_angle()))

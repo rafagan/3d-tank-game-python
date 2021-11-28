@@ -5,6 +5,7 @@ from game.camera import Camera
 from game.globals import Global
 from game.igame import IGame
 from game.world import World
+from tank.scene_object import SceneObject, SceneObjectType
 from tank.wall import Wall
 from tank.ground import Ground
 from tank.tank import Tank
@@ -23,6 +24,14 @@ class TankGame(IGame):
 
         self.aabb = AABB()
         self.aabb.update(np.array([0, 0, 0]), 1, 1, 1)
+
+        self.scene_objects = []
+        for i in range(1):
+            self.scene_objects.append(SceneObject(
+                SceneObjectType.FRIEND,
+                np.array([-10, 2.5, 0]),
+                np.array([5, 5, 5])
+            ))
 
     def init(self) -> None:
         self.tank.position = np.array([-self.ground.grid_width / 2, 1.0, 0.0])
@@ -76,6 +85,9 @@ class TankGame(IGame):
         self.wall.update()
         self.tank.update()
 
+        for obj in self.scene_objects:
+            obj.update()
+
         self.rotate_camera_around()
 
         # print(self.aabb.check_collision(self.ground.collider))
@@ -84,4 +96,7 @@ class TankGame(IGame):
         self.ground.draw()
         self.wall.draw()
         self.tank.draw()
+
+        for obj in self.scene_objects:
+            obj.draw()
 
