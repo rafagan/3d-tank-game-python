@@ -1,7 +1,12 @@
 from abc import abstractmethod
 from typing import Protocol, runtime_checkable
+from OpenGL.GL import *
 
 import numpy as np
+
+from game.globals import Global
+from primitive.box import Box
+from util.gl_color import GlColor
 
 
 @runtime_checkable
@@ -51,20 +56,49 @@ class AABB(ICollider):
         self.depth = depth
         self.update_min_max()
 
+    def draw(self):
+        mesh = Box()
+        GlColor.from_color(0, 255, 0, 255).gl_set()
+        glPushMatrix()
+
+        glTranslatef(
+            self.position[0],
+            self.position[1],
+            self.position[2]
+        )
+        glScalef(self.width, self.height, self.depth)
+
+        mesh.draw()
+        glPopMatrix()
+        Global().default_color.gl_set()
+
     def check_collision(self, other: ICollider) -> bool:
         if isinstance(other, AABB):
             mi = self.get_min()
+            min_x = mi[0]
+            min_y = mi[1]
+            min_z = mi[2]
+
             ma = self.get_max()
+            max_x = ma[0]
+            max_y = ma[1]
+            max_z = ma[2]
+
             omi = other.get_min()
+            other_min_x = omi[0]
+            other_min_y = omi[1]
+            other_min_z = omi[2]
+
             oma = other.get_max()
+            other_max_x = oma[0]
+            other_max_y = oma[1]
+            other_max_z = oma[2]
 
-            for i in range(3):
-                if ma[i] < omi[i]:
-                    return False
-                if mi[i] > oma[i]:
-                    return False
-
-            return True
+            return (
+                (min_x <= other_max_x and max_x >= other_min_x) and
+                (min_y <= other_max_y and max_y >= other_min_y) and
+                (min_z <= other_max_z and max_z >= other_min_z)
+            )
 
         raise Exception('Unsupported collider')
 

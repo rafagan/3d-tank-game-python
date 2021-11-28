@@ -39,20 +39,22 @@ class Wall(IDrawable, ICollidable):
         self.collider.update(self.position, self.grid_width, self.grid_height, 1)
 
     def draw(self) -> None:
-        distance = 1
-        start_x = -distance * self.grid_width / 2.0
-        start_y = -distance * self.grid_height / 2.0
+        self.collider.draw()
 
-        for i in range(self.grid_height):
-            for j in range(self.grid_width):
-                glPushMatrix()
-                glTranslatef(
-                    self.position[0] + start_x + distance * j,
-                    self.position[1] + start_y + distance * i,
-                    self.position[2]
-                )
-                self.cubes[j + i * self.grid_height].draw()
-                glPopMatrix()
+        # distance = 1
+        # start_x = -distance * self.grid_width / 2.0
+        # start_y = -distance * self.grid_height / 2.0
+        #
+        # for i in range(self.grid_height):
+        #     for j in range(self.grid_width):
+        #         glPushMatrix()
+        #         glTranslatef(
+        #             self.position[0] + start_x + distance * j,
+        #             self.position[1] + start_y + distance * i,
+        #             self.position[2]
+        #         )
+        #         self.cubes[j + i * self.grid_height].draw()
+        #         glPopMatrix()
 
     def get_collider(self) -> ICollider:
         return self.collider

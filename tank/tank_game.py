@@ -20,16 +20,16 @@ class TankGame(IGame):
         self.tank.position = np.array([0.0, 1.0, -self.ground.grid_depth / 2])
 
         # Top view
-        # Camera().eye = np.array([0.0, 50.0, 0.1])
-        # Camera().target = np.array([0.0, 0.0, 0.0])
+        Camera().eye = np.array([0.0, 50.0, 0.1])
+        Camera().target = np.array([0.0, 0.0, 0.0])
 
         # Back View
         # Camera().eye = np.array([0.0, 5.0, -35.0])
         # Camera().target = np.array([0.0, 10.0, 0.0])
 
         # Left View
-        Camera().eye = np.array([-45.0, 5.0, -10.0])
-        Camera().target = np.array([0.0, 10.0, 0.0])
+        # Camera().eye = np.array([-45.0, 5.0, -10.0])
+        # Camera().target = np.array([0.0, 10.0, 0.0])
 
     def terminate(self) -> None:
         ...

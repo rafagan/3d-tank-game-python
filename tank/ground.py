@@ -38,7 +38,7 @@ class Ground(IDrawable, ICollidable):
                 self.planes.append(plane)
                 current_color_index = (current_color_index + 1) % len(colors)
 
-        World().collidable_with_bullet.append(self)
+        # World().collidable_with_bullet.append(self)
 
     def update(self):
         self.collider.update(self.position, self.grid_width, 1, self.grid_depth)

@@ -25,7 +25,7 @@ class Tank(IDrawable):
 
         self.linear_speed = 2.5
         self.angular_speed = 45.0
-        self.bullet_speed = 10.0
+        self.bullet_speed = 12.0
 
         self.mesh = Box()
         self.mesh.colors = [GlColor.black_color()] * 6
@@ -80,22 +80,30 @@ class Tank(IDrawable):
         if KeyListener().is_key_first_pressed(b' '):
             self.spawn_bullet()
 
-        for bullet in self.bullets:
-            bullet.update()
+        destroyed_bullets = []
+        for i, bullet in enumerate(self.bullets):
+            if bullet.lifetime < bullet.max_lifetime:
+                bullet.update()
+            else:
+                destroyed_bullets.append(i)
 
+        self.destroy_bullets(destroyed_bullets)
         self.check_collisions_with_bullets()
 
     def check_collisions_with_bullets(self):
         destroyed_bullets = []
         for i, bullet in enumerate(self.bullets):
             for collidable in World().collidable_with_bullet:
-                if collidable.has_collision_with(bullet):
+                if bullet.has_collision_with(collidable):
                     bullet.on_collision_enter(collidable)
                     collidable.on_collision_enter(bullet)
                     destroyed_bullets.append(i)
 
+        self.destroy_bullets(destroyed_bullets)
+
+    def destroy_bullets(self, destroyed_bullets):
         for i in destroyed_bullets:
-            self.bullets.remove(i)
+            del self.bullets[i]
 
     def draw(self) -> None:
         for bullet in self.bullets:
