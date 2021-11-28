@@ -59,7 +59,7 @@ class Window:
 
         # OpenGL initialization
         glEnable(GL_DEPTH_TEST)
-        glEnable(GL_CULL_FACE)
+        # glEnable(GL_CULL_FACE)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
 
         self.game.init()
@@ -113,7 +113,7 @@ class Window:
         self.game.update()
         KeyListener().update()
         if self.accumulated_rate > Global().goal_rate:
-            self.accumulated_rate = self.accumulated_rate - Global().goal_rate
+            self.accumulated_rate = 0
             glutPostRedisplay()
 
     def __reshape(self, w: int, h: int):

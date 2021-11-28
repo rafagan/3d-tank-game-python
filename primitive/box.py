@@ -13,40 +13,40 @@ class Box(IDrawable):
 
         self.vertices = [
             # Front Face
-            np.array([-1.0, -1.0,  1.0]),
-            np.array([1.0, -1.0,  1.0]),
-            np.array([1.0,  1.0,  1.0]),
-            np.array([-1.0,  1.0,  1.0]),
+            np.array([-0.5, -0.5,  0.5]),
+            np.array([0.5, -0.5,  0.5]),
+            np.array([0.5,  0.5,  0.5]),
+            np.array([-0.5,  0.5,  0.5]),
 
             # Back Face
-            np.array([-1.0, -1.0, -1.0]),
-            np.array([-1.0,  1.0, -1.0]),
-            np.array([1.0,  1.0, -1.0]),
-            np.array([1.0, -1.0, -1.0]),
+            np.array([-0.5, -0.5, -0.5]),
+            np.array([-0.5,  0.5, -0.5]),
+            np.array([0.5,  0.5, -0.5]),
+            np.array([0.5, -0.5, -0.5]),
 
             # Top Face
-            np.array([-1.0,  1.0, -1.0]),
-            np.array([-1.0,  1.0,  1.0]),
-            np.array([1.0,  1.0,  1.0]),
-            np.array([1.0,  1.0, -1.0]),
+            np.array([-0.5,  0.5, -0.5]),
+            np.array([-0.5,  0.5,  0.5]),
+            np.array([0.5,  0.5,  0.5]),
+            np.array([0.5,  0.5, -0.5]),
 
             # Bottom Face
-            np.array([-1.0, -1.0, -1.0]),
-            np.array([1.0, -1.0, -1.0]),
-            np.array([1.0, -1.0,  1.0]),
-            np.array([-1.0, -1.0,  1.0]),
+            np.array([-0.5, -0.5, -0.5]),
+            np.array([0.5, -0.5, -0.5]),
+            np.array([0.5, -0.5,  0.5]),
+            np.array([-0.5, -0.5,  0.5]),
 
             # Right Face
-            np.array([1.0, -1.0, -1.0]),
-            np.array([1.0,  1.0, -1.0]),
-            np.array([1.0,  1.0,  1.0]),
-            np.array([1.0, -1.0,  1.0]),
+            np.array([0.5, -0.5, -0.5]),
+            np.array([0.5,  0.5, -0.5]),
+            np.array([0.5,  0.5,  0.5]),
+            np.array([0.5, -0.5,  0.5]),
 
             # Left Face
-            np.array([-1.0, -1.0, -1.0]),
-            np.array([-1.0, -1.0,  1.0]),
-            np.array([-1.0,  1.0,  1.0]),
-            np.array([-1.0,  1.0, -1.0]),
+            np.array([-0.5, -0.5, -0.5]),
+            np.array([-0.5, -0.5,  0.5]),
+            np.array([-0.5,  0.5,  0.5]),
+            np.array([-0.5,  0.5, -0.5]),
         ]
 
     def set_face_colors(self, colors):

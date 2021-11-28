@@ -6,6 +6,7 @@ from game.globals import Global
 from game.igame import IGame
 from tank.ground import Ground
 from tank.tank import Tank
+from util.math import vector
 from window.key_listener import KeyListener
 
 
@@ -15,7 +16,16 @@ class TankGame(IGame):
         self.tank = Tank()
 
     def init(self) -> None:
-        self.ground.position = np.array([0, -3, 0])
+        self.ground.position = np.array([0, 0, 0])
+        self.tank.position = np.array([0.0, 1.0, -12])
+
+        # Top view
+        Camera().eye = np.array([0, 50, 0.1])
+        Camera().target = np.array([0, 1, 0])
+
+        # Back View
+        # Camera().eye = np.array([0, 2, -34])
+        # Camera().target = np.array([0, 0, 1])
 
     def terminate(self) -> None:
         ...

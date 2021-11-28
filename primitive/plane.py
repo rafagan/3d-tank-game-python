@@ -9,13 +9,13 @@ from primitive.idrawable import IDrawable
 
 class Plane(IDrawable):
     def __init__(self):
-        self.color = Global().default_color.gl_set()
+        self.color = Global().default_color
 
         self.vertices = [
-            np.array([-1.0,  0, -1.0]),
-            np.array([-1.0,  0,  1.0]),
-            np.array([1.0,  0,  1.0]),
-            np.array([1.0,  0, -1.0]),
+            np.array([-0.5,  0, -0.5]),
+            np.array([-0.5,  0,  0.5]),
+            np.array([0.5,  0,  0.5]),
+            np.array([0.5,  0, -0.5]),
         ]
 
     def set_color(self, color):
