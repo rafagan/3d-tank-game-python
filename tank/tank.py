@@ -6,6 +6,7 @@ from game.camera import Camera
 from game.globals import Global
 from game.world import World
 from primitive.box import Box
+from primitive.cylinder import Cylinder
 from primitive.idrawable import IDrawable
 from tank.bullet import Bullet
 from util.gl_color import GlColor
@@ -31,15 +32,15 @@ class Tank(IDrawable):
 
         self.base_angle = 0.0
         self.cannon_angle = 45.0
-        self.base_offset = np.array([0, 1, 0])
+        self.base_offset = np.array([0, 1.25, 0])
         self.cannon_offset = np.array([0, 1, 0])
 
         self.mesh = Box()
         self.mesh.colors = [GlColor.black_color()] * 6
-        self.base_mesh = Box()
-        self.base_mesh.colors = [GlColor.yellow_color()] * 6
-        self.cannon_mesh = Box()
-        self.cannon_mesh.colors = [GlColor.cyan_color()] * 6
+        self.base_mesh = Cylinder()
+        self.base_mesh.color = GlColor.yellow_color()
+        self.cannon_mesh = Cylinder()
+        self.cannon_mesh.colors = GlColor.cyan_color()
 
         self.bullets = []
 
@@ -169,11 +170,15 @@ class Tank(IDrawable):
 
         glTranslatef(self.base_offset[0], self.base_offset[1], self.base_offset[2])
         glRotatef(-self.base_angle, 0, 1, 0)
+        glPushMatrix()
+        glScalef(1.0, 1.25, 1.0)
         self.base_mesh.draw()
+        glPopMatrix()
 
         glPushMatrix()  # 3
         glRotatef(-self.cannon_angle, 0, 0, 1)
         glTranslatef(self.cannon_offset[0], self.cannon_offset[1], self.cannon_offset[2])
+        glScalef(0.75, 0.75, 0.75)
         self.cannon_mesh.draw()
         glPopMatrix()  # 3
 
