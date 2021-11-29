@@ -26,15 +26,8 @@ class TankGame(IGame):
         self.ground = Ground()
         self.wall = Wall()
         self.tank = Tank()
-
-        for i in range(1):
-            self.scene_objects.append(SceneObject(
-                SceneObjectType.FRIEND if i % 2 == 0 else SceneObjectType.ENEMY,
-                np.array([-10, 2.5, 0]),
-                np.array([5, 5, 5])
-            ))
-
         self.tank.position = np.array([-self.ground.grid_width / 2, 1.0, 0.0])
+        self.create_scene_objects()
 
         # Top view
         # Camera().eye = np.array([0.0, 50.0, 0.1])
@@ -47,6 +40,25 @@ class TankGame(IGame):
         # Left View
         Camera().eye = np.array([-45.0, 5.0, -10.0])
         Camera().target = np.array([0.0, 10.0, 0.0])
+
+    def create_scene_objects(self):
+        amount_x = 10
+        amount_z = 4
+        distance_x = self.ground.grid_width / amount_x
+        distance_z = self.ground.grid_depth / amount_z
+        start_x = -self.ground.grid_width / 2.0
+        start_z = -self.ground.grid_depth / 2.0
+
+        for i in range(2):  # TODO: 40
+            self.scene_objects.append(SceneObject(
+                SceneObjectType.FRIEND if i % 2 == 0 else SceneObjectType.ENEMY,
+                np.array([
+                    start_x + distance_x * (i % amount_x),
+                    2.5,
+                    start_z + distance_z * (i // amount_x)
+                ]),
+                np.array([1, 1, 1])
+            ))
 
     def terminate(self) -> None:
         ...

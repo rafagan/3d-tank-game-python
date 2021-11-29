@@ -3,9 +3,9 @@ from enum import Enum
 import numpy as np
 from OpenGL.GL import *
 
+from game.asset_manager import AssetManager
 from game.world import World
 from primitive.idrawable import IDrawable
-from tri.tri_mesh import TriMesh
 from util.math.collision import ICollidable, ICollider, AABB
 
 
@@ -16,8 +16,13 @@ class SceneObjectType(Enum):
 
 class SceneObject(IDrawable, ICollidable):
     def __init__(self, object_type: SceneObjectType, start_position: np.array, size: np.array):
+        print(start_position)
+
         self.type = object_type
-        self.mesh = TriMesh('tree_1.tri')
+        self.mesh = (
+            AssetManager().friend_mesh if object_type == SceneObjectType.FRIEND
+            else AssetManager().enemy_mesh
+        )
         self.collider = AABB()
         self.position = start_position
         self.size = size
@@ -30,6 +35,12 @@ class SceneObject(IDrawable, ICollidable):
     def draw(self) -> None:
         glPushMatrix()
         glTranslatef(self.position[0], self.position[1], self.position[2])
+
+        if self.type == SceneObjectType.FRIEND:
+            glScalef(0.1, 0.1, 0.1)
+        else:
+            glScalef(0.05, 0.05, 0.05)
+
         glScalef(self.size[0], self.size[1], self.size[2])
         self.mesh.draw()
         glPopMatrix()

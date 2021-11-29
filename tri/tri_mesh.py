@@ -50,7 +50,7 @@ class TriMesh(IDrawable):
                     self.colors.append(GlColor.from_hex(int(values[9], 0)))
 
         # self.center_mesh()
-        self.normalize_mesh()
+        # self.normalize_mesh()
 
     def find_boundaries(self):
         min_boundary = np.array([float(sys.maxsize), float(sys.maxsize), float(sys.maxsize)])

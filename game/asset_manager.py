@@ -1,12 +1,17 @@
 import pygame
 
 from game.globals import Global
+from tri.tri_mesh import TriMesh
 from util.decorator.singleton import singleton
 from OpenGL.GL import *
 
 
 @singleton
 class AssetManager:
+    def __init__(self):
+        self.enemy_mesh = TriMesh('tree_1.tri')
+        self.friend_mesh = TriMesh('dog_2.tri')
+
     @staticmethod
     def load_texture(file_name):
         file_path = f'{Global().resources_path}/textures/{file_name}'

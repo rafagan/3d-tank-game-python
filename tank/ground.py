@@ -1,13 +1,10 @@
 import numpy as np
+from OpenGL.GL import *
 
 from game.asset_manager import AssetManager
 from game.world import World
-from primitive.box import Box
 from primitive.idrawable import IDrawable
 from primitive.plane import Plane
-from util.gl_color import GlColor
-from OpenGL.GL import *
-
 from util.math.collision import AABB, ICollidable, ICollider
 
 
