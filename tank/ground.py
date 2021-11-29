@@ -1,5 +1,6 @@
 import numpy as np
 
+from game.asset_manager import AssetManager
 from game.world import World
 from primitive.box import Box
 from primitive.idrawable import IDrawable
@@ -18,26 +19,12 @@ class Ground(IDrawable, ICollidable):
         self.planes = []
         self.plane_colliders = []
         self.collider = AABB()
+        self.texture_id = AssetManager().load_texture('wood.png')
 
-        colors = [
-            GlColor.white_color(),
-            GlColor.black_color(),
-            GlColor.dark_gray_color(),
-            GlColor.red_color(),
-            GlColor.green_color(),
-            GlColor.blue_color(),
-            GlColor.yellow_color(),
-            GlColor.magenta_color(),
-            GlColor.cyan_color(),
-        ]
-
-        current_color_index = 0
         for i in range(self.grid_depth):
             for j in range(self.grid_width):
                 plane = Plane()
-                plane.color = colors[current_color_index]
                 self.planes.append(plane)
-                current_color_index = (current_color_index + 1) % len(colors)
 
         distance = 1
         start_x = -distance * self.grid_width / 2.0
@@ -58,6 +45,8 @@ class Ground(IDrawable, ICollidable):
         self.collider.update(self.position, self.grid_width, 1, self.grid_depth)
 
     def draw(self) -> None:
+        glBindTexture(GL_TEXTURE_2D, self.texture_id)
+
         for i in range(self.grid_depth):
             for j in range(self.grid_width):
                 index = j + i * self.grid_width
@@ -74,6 +63,7 @@ class Ground(IDrawable, ICollidable):
                 self.planes[index].draw()
                 glPopMatrix()
 
+        glBindTexture(GL_TEXTURE_2D, 0)
         # self.collider.draw()
 
     def get_collider(self) -> ICollider:

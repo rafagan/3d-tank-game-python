@@ -7,6 +7,8 @@ from util.gl_color import GlColor
 @singleton
 class Global:
     def __init__(self):
+        self.resources_path = ''
+
         self.clear_color = GlColor.dark_gray_color()
         self.default_color = GlColor.white_color()
 

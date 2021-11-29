@@ -16,24 +16,24 @@ from window.key_listener import KeyListener
 
 class TankGame(IGame):
     def __init__(self):
+        self.ground = None
+        self.wall = None
+        self.tank = None
+        self.camera_angle = 180
+        self.scene_objects = []
+
+    def init(self) -> None:
         self.ground = Ground()
         self.wall = Wall()
         self.tank = Tank()
 
-        self.camera_angle = 180
-
-        self.aabb = AABB()
-        self.aabb.update(np.array([0, 0, 0]), 1, 1, 1)
-
-        self.scene_objects = []
-        for i in range(0):
+        for i in range(1):
             self.scene_objects.append(SceneObject(
                 SceneObjectType.FRIEND if i % 2 == 0 else SceneObjectType.ENEMY,
                 np.array([-10, 2.5, 0]),
                 np.array([5, 5, 5])
             ))
 
-    def init(self) -> None:
         self.tank.position = np.array([-self.ground.grid_width / 2, 1.0, 0.0])
 
         # Top view
@@ -89,8 +89,6 @@ class TankGame(IGame):
             obj.update()
 
         # self.rotate_camera_around()
-
-        # print(self.aabb.check_collision(self.ground.collider))
 
     def draw(self) -> None:
         self.ground.draw()

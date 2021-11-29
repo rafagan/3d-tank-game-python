@@ -13,6 +13,17 @@ class GlColor:
         return color
 
     @staticmethod
+    def from_hex(hex_value: int):
+        color = GlColor()
+        red = hex_value & 0xFF
+        green = hex_value >> 8 & 0xFF
+        blue = hex_value >> 16 & 0xFF
+        color.color = np.array([
+            red / 255, green / 255, blue / 255, 1.0
+        ])
+        return color
+
+    @staticmethod
     def white_color():
         return GlColor.from_color(255, 255, 255, 255)
 

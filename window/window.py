@@ -62,7 +62,28 @@ class Window:
         # OpenGL initialization
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
+        glEnable(GL_TEXTURE_2D)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
+
+        # Light
+        ambient_light = [0.4, 0.4, 0.4]
+        diffuse_light = [0.7, 0.7, 0.7]
+        specular_light = [0.9, 0.9, 0.9]
+        light_position = [0.0, 0.0, 0.0]
+        glEnable(GL_LIGHTING)
+        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient_light)
+        glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light)
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light)
+        glLightfv(GL_LIGHT0, GL_SPECULAR, specular_light)
+        glLightfv(GL_LIGHT0, GL_POSITION, light_position)
+        glEnable(GL_LIGHT0)
+
+        # Material
+        specular = [1.0, 1.0, 1.0]
+        shininess = 51
+        glEnable(GL_COLOR_MATERIAL)
+        glMaterialfv(GL_FRONT, GL_SPECULAR, specular)
+        glMateriali(GL_FRONT, GL_SHININESS, shininess)
 
         self.game.init()
 

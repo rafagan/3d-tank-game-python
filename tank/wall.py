@@ -1,13 +1,10 @@
-import random
-
 import numpy as np
+from OpenGL.GL import *
 
+from game.asset_manager import AssetManager
 from game.world import World
 from primitive.box import Box
 from primitive.idrawable import IDrawable
-from util.gl_color import GlColor
-from OpenGL.GL import *
-
 from util.math.collision import AABB, ICollider, ICollidable
 
 
@@ -19,20 +16,12 @@ class Wall(IDrawable, ICollidable):
         self.cubes = []
         self.cube_colliders = []
         self.collider = AABB()
+        self.texture_id = AssetManager().load_texture('wall.jpg')
 
-        colors = [
-            GlColor.white_color(),
-            GlColor.black_color(),
-            GlColor.blue_color()
-        ]
-
-        current_color_index = 0
         for i in range(self.grid_height):
             for j in range(self.grid_depth):
                 cube = Box()
-                cube.colors = [colors[current_color_index]] * 6
                 self.cubes.append(cube)
-                current_color_index = random.Random().randrange(0, 3, 1)
 
         distance = 1
         start_z = -distance * self.grid_depth / 2.0
@@ -53,6 +42,8 @@ class Wall(IDrawable, ICollidable):
         self.collider.update(self.position, 1, self.grid_height, self.grid_depth)
 
     def draw(self) -> None:
+        glBindTexture(GL_TEXTURE_2D, self.texture_id)
+
         for i in range(self.grid_height):
             for j in range(self.grid_depth):
                 index = j + i * self.grid_depth
@@ -69,6 +60,7 @@ class Wall(IDrawable, ICollidable):
                 cube.draw()
                 glPopMatrix()
 
+        glBindTexture(GL_TEXTURE_2D, 0)
         # self.collider.draw()
 
     def get_collider(self) -> ICollider:

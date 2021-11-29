@@ -5,6 +5,7 @@ from OpenGL.GL import *
 
 from game.globals import Global
 from primitive.idrawable import IDrawable
+from util.math import vector
 
 
 class Box(IDrawable):
@@ -49,17 +50,42 @@ class Box(IDrawable):
             np.array([-0.5,  0.5, -0.5]),
         ]
 
+        self.normals = [
+            vector.normalize(np.cross(self.vertices[0], self.vertices[1])),
+            vector.normalize(np.cross(self.vertices[4], self.vertices[5])),
+            vector.normalize(np.cross(self.vertices[8], self.vertices[9])),
+            vector.normalize(np.cross(self.vertices[12], self.vertices[13])),
+            vector.normalize(np.cross(self.vertices[16], self.vertices[17])),
+            vector.normalize(np.cross(self.vertices[20], self.vertices[21])),
+        ]
+
+        self.texture_coords = [
+            np.array([0.0, 0.0]),
+            np.array([1.0, 0.0]),
+            np.array([1.0, 1.0]),
+            np.array([0.0, 1.0]),
+        ]
+
     def set_face_colors(self, colors):
         if len(colors) != 6:
             raise exception('You must provide 6 colors, one for each face')
         self.colors = colors
 
     def draw(self) -> None:
+        normal = None
+
         glBegin(GL_QUADS)
         for i, vertex in enumerate(self.vertices):
-            if len(self.colors) == 6 and i % 4 == 0:
-                self.colors[i // 4].gl_set()
+            if i % 4 == 0:
+                j = i // 4
+                if len(self.colors) == 6:
+                    self.colors[j].gl_set()
 
+                normal = self.normals[j]
+
+            texture_coord = self.texture_coords[i % 4]
+            glTexCoord2f(texture_coord[0], texture_coord[1])
+            glNormal3f(normal[0], normal[1], normal[2])
             glVertex3f(vertex[0], vertex[1], vertex[2])
         glEnd()
 

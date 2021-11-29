@@ -1,12 +1,12 @@
 from enum import Enum
 
 import numpy as np
+from OpenGL.GL import *
 
 from game.world import World
-from primitive.box import Box
 from primitive.idrawable import IDrawable
+from tri.tri_mesh import TriMesh
 from util.math.collision import ICollidable, ICollider, AABB
-from OpenGL.GL import *
 
 
 class SceneObjectType(Enum):
@@ -17,7 +17,7 @@ class SceneObjectType(Enum):
 class SceneObject(IDrawable, ICollidable):
     def __init__(self, object_type: SceneObjectType, start_position: np.array, size: np.array):
         self.type = object_type
-        self.mesh = Box()
+        self.mesh = TriMesh('tree_1.tri')
         self.collider = AABB()
         self.position = start_position
         self.size = size

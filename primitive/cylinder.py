@@ -13,6 +13,8 @@ class Cylinder(IDrawable):
         self.resolution = 100
         self.color = Global().default_color
 
+        self.vertices = []
+
     def set_color(self, color):
         self.color = color
 
