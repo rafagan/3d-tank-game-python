@@ -5,6 +5,7 @@ from game.asset_manager import AssetManager
 from game.world import World
 from primitive.box import Box
 from primitive.idrawable import IDrawable
+from tank.game_manager import GameManager
 from util.math.collision import AABB, ICollider, ICollidable
 
 
@@ -98,3 +99,4 @@ class Wall(IDrawable, ICollidable):
                 continue
             self.cubes[i] = None
             self.cube_colliders[i] = None
+            GameManager().score_killed_wall_tile()

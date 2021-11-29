@@ -57,7 +57,7 @@ class TankGame(IGame):
                     2.5,
                     start_z + distance_z * (i // amount_x)
                 ]),
-                np.array([1, 1, 1])
+                np.array([4, 4, 4])
             ))
 
     def terminate(self) -> None:
@@ -97,10 +97,24 @@ class TankGame(IGame):
         self.wall.update()
         self.tank.update()
 
-        for obj in self.scene_objects:
+        destroyed_objs = []
+        for i, obj in enumerate(self.scene_objects):
             obj.update()
+            if obj.is_dead:
+                destroyed_objs.append(i)
+
+        if len(destroyed_objs) > 0:
+            self.destroy_scene_objects(set(destroyed_objs))
 
         # self.rotate_camera_around()
+
+    def destroy_scene_objects(self, destroyed: set[int]) -> None:
+        items = []
+        for i, item in enumerate(self.scene_objects):
+            if i not in destroyed:
+                items.append(item)
+
+        self.scene_objects = items
 
     def draw(self) -> None:
         self.ground.draw()
@@ -109,4 +123,3 @@ class TankGame(IGame):
 
         for obj in self.scene_objects:
             obj.draw()
-

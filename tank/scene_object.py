@@ -6,6 +6,7 @@ from OpenGL.GL import *
 from game.asset_manager import AssetManager
 from game.world import World
 from primitive.idrawable import IDrawable
+from tank.game_manager import GameManager
 from util.math.collision import ICollidable, ICollider, AABB
 
 
@@ -16,8 +17,6 @@ class SceneObjectType(Enum):
 
 class SceneObject(IDrawable, ICollidable):
     def __init__(self, object_type: SceneObjectType, start_position: np.array, size: np.array):
-        print(start_position)
-
         self.type = object_type
         self.mesh = (
             AssetManager().friend_mesh if object_type == SceneObjectType.FRIEND
@@ -26,6 +25,7 @@ class SceneObject(IDrawable, ICollidable):
         self.collider = AABB()
         self.position = start_position
         self.size = size
+        self.is_dead = False
 
         World().collidable_with_bullet.append(self)
 
@@ -37,13 +37,15 @@ class SceneObject(IDrawable, ICollidable):
         glTranslatef(self.position[0], self.position[1], self.position[2])
 
         if self.type == SceneObjectType.FRIEND:
-            glScalef(0.1, 0.1, 0.1)
+            glScalef(0.01, 0.01, 0.01)
         else:
-            glScalef(0.05, 0.05, 0.05)
+            glScalef(0.005, 0.005, 0.005)
 
         glScalef(self.size[0], self.size[1], self.size[2])
         self.mesh.draw()
         glPopMatrix()
+
+        # self.collider.draw()
 
     def get_collider(self) -> ICollider:
         return self.collider
@@ -56,3 +58,9 @@ class SceneObject(IDrawable, ICollidable):
 
         if isinstance(other, Bullet):
             other.kill()
+            self.is_dead = True
+
+            if self.type == SceneObjectType.FRIEND:
+                GameManager().score_killed_friend()
+            if self.type == SceneObjectType.ENEMY:
+                GameManager().score_killed_enemy()

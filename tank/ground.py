@@ -5,6 +5,7 @@ from game.asset_manager import AssetManager
 from game.world import World
 from primitive.idrawable import IDrawable
 from primitive.plane import Plane
+from tank.game_manager import GameManager
 from util.math.collision import AABB, ICollidable, ICollider
 
 
@@ -80,6 +81,7 @@ class Ground(IDrawable, ICollidable):
                 if aabb.check_collision(other.get_collider()):
                     destroyed_tiles.append(i)
                     other.kill()
+                    GameManager().score_killed_ground_tile()
                     break
 
             self.destroy_tiles(set(destroyed_tiles))
