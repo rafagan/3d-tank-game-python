@@ -1,4 +1,5 @@
 from util.decorator.singleton import singleton
+from window.window import Window
 
 
 @singleton
@@ -24,4 +25,5 @@ class GameManager:
 
     @staticmethod
     def killed_myself():
-        exit(0)
+        print('Game Over')
+        Window().terminate_gracefully()

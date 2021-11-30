@@ -33,7 +33,7 @@ class Window:
             self.__execute()
         except Exception as e:
             print(e)
-            self.__terminate_gracefully()
+            self.terminate_gracefully()
             exit(0)
 
     def __init(self) -> None:
@@ -90,7 +90,7 @@ class Window:
     def __execute(self) -> None:
         glutMainLoop()
 
-    def __terminate_gracefully(self) -> None:
+    def terminate_gracefully(self) -> None:
         self.game.terminate()
         try:
             glutLeaveMainLoop()
@@ -135,7 +135,7 @@ class Window:
         Global().delta_time = dt
 
         if KeyListener().is_key_pressed(KeyListener().ESCAPE):
-            self.__terminate_gracefully()
+            self.terminate_gracefully()
 
         self.game.update()
         KeyListener().update()

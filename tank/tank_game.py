@@ -27,6 +27,8 @@ class TankGame(IGame):
         self.wall = Wall()
         self.tank = Tank()
         self.tank.position = np.array([-self.ground.grid_width / 2, 1.0, 0.0])
+        Camera().eye = np.array([-self.ground.grid_width / 2 - 10, 3.0, 0.0])
+        Camera().target = Camera().eye + np.array([Camera().look_at_magnitude, 0.0, 0.0])
         self.create_scene_objects()
 
         # Top view
@@ -38,8 +40,8 @@ class TankGame(IGame):
         # Camera().target = np.array([0.0, 10.0, 0.0])
 
         # Left View
-        Camera().eye = np.array([-45.0, 5.0, -10.0])
-        Camera().target = np.array([0.0, 10.0, 0.0])
+        # Camera().eye = np.array([-45.0, 5.0, -10.0])
+        # Camera().target = np.array([0.0, 10.0, 0.0])
 
     def create_scene_objects(self):
         amount_x = 10
@@ -49,7 +51,7 @@ class TankGame(IGame):
         start_x = -self.ground.grid_width / 2.0
         start_z = -self.ground.grid_depth / 2.0
 
-        for i in range(2):  # TODO: 40
+        for i in range(12, 14):  # TODO: 40
             self.scene_objects.append(SceneObject(
                 SceneObjectType.FRIEND if i % 2 == 0 else SceneObjectType.ENEMY,
                 np.array([
@@ -101,6 +103,7 @@ class TankGame(IGame):
         for i, obj in enumerate(self.scene_objects):
             obj.update()
             if obj.is_dead:
+                print(obj.type)
                 destroyed_objs.append(i)
 
         if len(destroyed_objs) > 0:
@@ -113,6 +116,8 @@ class TankGame(IGame):
         for i, item in enumerate(self.scene_objects):
             if i not in destroyed:
                 items.append(item)
+            else:
+                World().collidable_with_bullet.remove(item)
 
         self.scene_objects = items
 
