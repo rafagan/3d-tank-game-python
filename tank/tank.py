@@ -191,7 +191,7 @@ class Tank(IDrawable, ICollidable):
 
         glPopMatrix()  # 1
 
-        self.collider.draw()
+        # self.collider.draw()
 
     def get_collider(self) -> ICollider:
         return self.collider

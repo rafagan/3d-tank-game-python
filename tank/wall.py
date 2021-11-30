@@ -17,11 +17,11 @@ class Wall(IDrawable, ICollidable):
         self.cubes = []
         self.cube_colliders = []
         self.collider = AABB()
-        self.texture_id = AssetManager().load_texture('wall.jpg')
+        self.texture_id = AssetManager().load_texture('texture_atlas.jpg')
 
         for i in range(self.grid_height):
             for j in range(self.grid_depth):
-                cube = Box()
+                cube = Box(texture_range=np.array([0.0, 0.5, 0.0, 0.5]))
                 self.cubes.append(cube)
 
         distance = 1

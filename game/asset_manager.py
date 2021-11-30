@@ -16,7 +16,7 @@ class AssetManager:
     def load_texture(file_name):
         file_path = f'{Global().resources_path}/textures/{file_name}'
         texture_surface = pygame.image.load(file_path)
-        texture_data = pygame.image.tostring(texture_surface, "RGBA", True)
+        texture_data = pygame.image.tostring(texture_surface, "RGBA", False)
         width = texture_surface.get_width()
         height = texture_surface.get_height()
 

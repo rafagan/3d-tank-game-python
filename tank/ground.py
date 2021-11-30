@@ -17,11 +17,11 @@ class Ground(IDrawable, ICollidable):
         self.planes = []
         self.plane_colliders = []
         self.collider = AABB()
-        self.texture_id = AssetManager().load_texture('wood.png')
+        self.texture_id = AssetManager().load_texture('texture_atlas.jpg')
 
         for i in range(self.grid_depth):
             for j in range(self.grid_width):
-                plane = Plane()
+                plane = Plane(texture_range=np.array([0.0, 0.5, 0.5, 1.0]))
                 self.planes.append(plane)
 
         distance = 1

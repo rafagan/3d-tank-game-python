@@ -9,7 +9,9 @@ from util.math import vector
 
 
 class Box(IDrawable):
-    def __init__(self):
+    def __init__(self, texture_range=None):
+        if texture_range is None:
+            texture_range = np.array([0.0, 0.0, 1.0, 1.0])
         self.colors = []
 
         self.vertices = [
@@ -60,10 +62,10 @@ class Box(IDrawable):
         ]
 
         self.texture_coords = [
-            np.array([0.0, 0.0]),
-            np.array([1.0, 0.0]),
-            np.array([1.0, 1.0]),
-            np.array([0.0, 1.0]),
+            np.array([texture_range[0], texture_range[2]]),
+            np.array([texture_range[1], texture_range[2]]),
+            np.array([texture_range[1], texture_range[3]]),
+            np.array([texture_range[0], texture_range[3]]),
         ]
 
     def set_face_colors(self, colors):
