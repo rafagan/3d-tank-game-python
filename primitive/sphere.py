@@ -1,5 +1,6 @@
 import numpy as np
 from OpenGL.GL import *
+from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 from game.globals import Global
@@ -16,5 +17,11 @@ class Sphere(IDrawable):
 
     def draw(self) -> None:
         self.color.gl_set()
-        glutSolidSphere(1.0, self.resolution, self.resolution)
+
+        sphere = gluNewQuadric()
+        gluQuadricDrawStyle(sphere, GLU_FILL)
+        gluQuadricNormals(sphere, GLU_SMOOTH)
+        gluQuadricOrientation(sphere, GLU_OUTSIDE)
+        gluSphere(sphere, 1.0, self.resolution, self.resolution)
+
         Global().default_color.gl_set()

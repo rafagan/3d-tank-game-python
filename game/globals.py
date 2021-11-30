@@ -22,7 +22,7 @@ class Global:
         self.goal_rate = 1.0 / self.frame_rate
         self.delta_time = 0
 
-        self.gravity = np.array([0, -3, 0])
+        self.gravity = np.array([0, -50, 0])
 
     def aspect_ratio(self):
         return self.window_width / self.window_height

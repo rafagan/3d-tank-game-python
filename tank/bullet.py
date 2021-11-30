@@ -16,15 +16,19 @@ class Bullet(IDrawable, ICollidable):
         self.size = np.array([0.4, 0.4, 0.4])
         self.collider = AABB()
         self.lifetime = 0
-        self.max_lifetime = 5
+        self.max_lifetime = 10
 
         self.mesh = Sphere()
         self.mesh.color = GlColor.from_color(150, 75, 0, 255)
 
     def update(self) -> None:
-        self.lifetime += Global().delta_time
-        self.velocity += Global().gravity * Global().delta_time
-        self.position += self.velocity * Global().delta_time
+        delta_time = Global().delta_time
+        self.lifetime += delta_time
+
+        acceleration = (Global().gravity * pow(delta_time, 2)) / 2
+        self.velocity += acceleration
+        self.position += self.velocity * delta_time
+
         self.collider.update(self.position, self.size[0], self.size[1], self.size[2])
 
     def draw(self) -> None:

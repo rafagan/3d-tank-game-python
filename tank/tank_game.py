@@ -26,8 +26,10 @@ class TankGame(IGame):
         self.ground = Ground()
         self.wall = Wall()
         self.tank = Tank()
-        self.tank.position = np.array([-self.ground.grid_width / 2, 1.0, 0.0])
-        Camera().eye = np.array([-self.ground.grid_width / 2 - 10, 3.0, 0.0])
+
+        tank_start_x = -self.ground.grid_width / 2 + self.tank.width / 2
+        self.tank.position = np.array([tank_start_x, 1.0, 0.0])
+        Camera().eye = np.array([tank_start_x - 10, 3.0, 0.0])
         Camera().target = Camera().eye + np.array([Camera().look_at_magnitude, 0.0, 0.0])
         self.create_scene_objects()
 
