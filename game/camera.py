@@ -4,6 +4,7 @@ from util.decorator.singleton import singleton
 from OpenGL.GLU import *
 
 from util.math import vector, to_radians
+from util.math.matrix import my_glu_look_at
 
 
 @singleton
@@ -21,11 +22,7 @@ class Camera:
         self.up = np.array([0.0, 1.0, 0.0])
 
     def update(self) -> None:
-        gluLookAt(
-            self.eye[0], self.eye[1], self.eye[2],
-            self.target[0], self.target[1], self.target[2],
-            self.up[0], self.up[1], self.up[2]
-        )
+        my_glu_look_at(self.eye, self.target, self.up)
 
     def direction(self) -> np.array:
         return vector.normalize(self.target - self.eye)

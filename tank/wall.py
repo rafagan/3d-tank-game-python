@@ -27,6 +27,7 @@ class Wall(IDrawable, ICollidable):
         distance = 1
         start_z = -distance * self.grid_depth / 2.0
         start_y = -distance * self.grid_height / 2.0
+
         for i in range(self.grid_height):
             for j in range(self.grid_depth):
                 aabb = AABB()

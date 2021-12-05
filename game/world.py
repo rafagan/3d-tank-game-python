@@ -1,7 +1,11 @@
+import math
+
+from OpenGL.GL import *
 from OpenGL.GLU import *
 
 from game.globals import Global
 from util.decorator.singleton import singleton
+from util.math.matrix import my_glu_perspective
 
 
 @singleton
@@ -18,4 +22,5 @@ class World:
         near = 0.01
         far = 100.0
 
-        gluPerspective(field_of_view, Global().aspect_ratio(), near, far)
+        my_glu_perspective(field_of_view, Global().aspect_ratio(), near, far)
+

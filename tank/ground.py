@@ -21,7 +21,7 @@ class Ground(IDrawable, ICollidable):
 
         for i in range(self.grid_depth):
             for j in range(self.grid_width):
-                plane = Plane(texture_range=np.array([0.0, 0.5, 0.5, 1.0]))
+                plane = Plane(texture_range=np.array([0.5, 1.0, 0.0, 0.5]))
                 self.planes.append(plane)
 
         distance = 1
