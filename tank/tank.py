@@ -135,7 +135,7 @@ class Tank(IDrawable, ICollidable):
         self.collider.update(self.position, self.width + 1, self.height, self.depth + 1)
 
     def check_collisions_with_bullets(self) -> None:
-        for i, bullet in enumerate(self.bullets):
+        for bullet in self.bullets:
             for collidable in World().collidable_with_bullet:
                 if bullet.has_collision_with(collidable):
                     bullet.on_collision_enter(collidable)

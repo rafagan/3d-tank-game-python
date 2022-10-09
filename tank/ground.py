@@ -58,7 +58,7 @@ class Ground(IDrawable, ICollidable):
                     self.plane_colliders[index].position[1],
                     self.plane_colliders[index].position[2]
                 )
-                self.planes[index].draw()
+                plane.draw()
                 glPopMatrix()
 
         glBindTexture(GL_TEXTURE_2D, 0)

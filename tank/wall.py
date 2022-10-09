@@ -79,6 +79,7 @@ class Wall(IDrawable, ICollidable):
             for i, aabb in enumerate(self.cube_colliders):
                 if aabb is None:
                     continue
+
                 if aabb.check_collision(other.get_collider()):
                     destroyed_tiles.append(i - 1 - self.grid_depth)
                     destroyed_tiles.append(i - self.grid_depth)

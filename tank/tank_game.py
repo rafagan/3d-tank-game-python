@@ -19,8 +19,9 @@ class TankGame(IGame):
         self.ground = None
         self.wall = None
         self.tank = None
-        self.camera_angle = 180
         self.scene_objects = []
+
+        self.camera_angle = 180
 
     def init(self) -> None:
         self.ground = Ground()
@@ -53,7 +54,7 @@ class TankGame(IGame):
         start_x = -self.ground.grid_width / 2.0
         start_z = -self.ground.grid_depth / 2.0
 
-        for i in range(12, 14):  # TODO: 40
+        for i in range(11, 13):  # TODO: 40
             self.scene_objects.append(SceneObject(
                 SceneObjectType.FRIEND if i % 2 == 0 else SceneObjectType.ENEMY,
                 np.array([
@@ -111,7 +112,7 @@ class TankGame(IGame):
         if len(destroyed_objs) > 0:
             self.destroy_scene_objects(set(destroyed_objs))
 
-        # self.rotate_camera_around()
+        self.rotate_camera_around()
 
     def destroy_scene_objects(self, destroyed: set[int]) -> None:
         items = []

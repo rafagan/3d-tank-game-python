@@ -18,6 +18,7 @@ class SceneObjectType(Enum):
 class SceneObject(IDrawable, ICollidable):
     def __init__(self, object_type: SceneObjectType, start_position: np.array, size: np.array):
         self.type = object_type
+
         self.mesh = (
             AssetManager().friend_mesh if object_type == SceneObjectType.FRIEND
             else AssetManager().enemy_mesh

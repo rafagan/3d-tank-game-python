@@ -66,7 +66,6 @@ def my_glu_look_at(eye: np.array, target: np.array, up: np.array):
         up[0], up[1], up[2]
     )
 
-    # forward = target - eye
     # side = vector.normalize(np.cross(target, up))
     # up = vector.normalize(np.cross(side, target))
     #

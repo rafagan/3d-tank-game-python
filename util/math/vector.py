@@ -18,10 +18,11 @@ def normalize(v: np.array) -> np.array:
     return v / length
 
 
-def resize(v: np.array, magnitude) -> np.array:
+def resize(v: np.array, magnitude: float) -> np.array:
     return normalize(v) * magnitude
 
 
+# Formula de rotação de rodrigues
 def rotate(v: np.array, angle: float, axis: np.array) -> np.array:
     s = sin(angle)
     c = cos(angle)
